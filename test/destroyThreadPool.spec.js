@@ -1,9 +1,9 @@
 // load appropriate npool module
 try {
-    var nPool = require(__dirname + '/../../build/Release/npool');
+    var nPool = require(__dirname + '/../build/Release/npool');
 }
 catch (e) {
-    var nPool = require(__dirname + '/../../build/Debug/npool');
+    var nPool = require(__dirname + '/../build/Debug/npool');
 }
 
 describe("[ createThreadPool() - Unit Tests ]", function() {

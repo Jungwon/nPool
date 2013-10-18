@@ -1,10 +1,13 @@
 // load appropriate npool module
 try {
-    var nPool = require(__dirname + '/../../build/Release/npool');
+    var nPool = require(__dirname + '/../build/Release/npool');
 }
 catch (e) {
-    var nPool = require(__dirname + '/../../build/Debug/npool');
+    var nPool = require(__dirname + '/../build/Debug/npool');
 }
+
+// test file
+var testFile = __dirname + '/resources/helloWorld.js';
 
 describe("[ queueWork() - Unit Tests ]", function() {
   it("OK", function() {
@@ -57,7 +60,7 @@ describe("queueWork() shall execute without throwing an exception when a single 
     var resultId = null;
 
     runs(function() {
-        nPool.loadFile(1, __dirname + '/../resources/helloWorld.js');
+        nPool.loadFile(1, testFile);
         nPool.createThreadPool(2);
     
         var unitOfWork = {
@@ -110,7 +113,7 @@ describe("queueWork() shall execute without throwing an exception when multiple 
     var resultId = null;
 
     runs(function() {
-        nPool.loadFile(1, __dirname + '/../resources/helloWorld.js');
+        nPool.loadFile(1, testFile);
         nPool.createThreadPool(2);
 
         for(var i = 0; i < 10; i++) {

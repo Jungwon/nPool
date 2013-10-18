@@ -1,10 +1,12 @@
 // load appropriate npool module
 try {
-    var nPool = require(__dirname + '/../../build/Release/npool');
+    var nPool = require(__dirname + '/../build/Release/npool');
 }
 catch (e) {
-    var nPool = require(__dirname + '/../../build/Debug/npool');
+    var nPool = require(__dirname + '/../build/Debug/npool');
 }
+
+var testFile = __dirname + '/resources/helloWorld.js';
 
 describe("[ loadFile() - Unit Tests ]", function() {
   it("OK", function() {
@@ -17,7 +19,7 @@ describe("loadFile() shall execute without throwing an exception when a valid fi
     
     var thrownException = null;
     try {
-        nPool.loadFile(1, __dirname + '/../resources/helloWorld.js');
+        nPool.loadFile(1, testFile);
     }
     catch(exception) {
         thrownException = exception;
@@ -33,7 +35,7 @@ describe("loadFile() shall throw an exception when a file does not exist.", func
     
     var thrownException = null;
     try {
-        nPool.loadFile(1, __dirname + '/../resources/fileDoesNotExist.js');    
+        nPool.loadFile(1, __dirname + './fileDoesNotExist.js');    
     }
     catch(exception) {
         thrownException = exception;
@@ -44,11 +46,11 @@ describe("loadFile() shall throw an exception when a file does not exist.", func
 
 describe("loadFile() shall throw an exception when a file key is used twice.", function() {
   it("Threw an exception because the file key has already been used.", function() {
-    nPool.loadFile(1, __dirname + '/../resources/helloWorld.js');
+    nPool.loadFile(1, testFile);
     
     var thrownException = null;
     try {
-      nPool.loadFile(1, __dirname + '/../resources/helloWorld.js');
+      nPool.loadFile(1, testFile);
     }
     catch(exception) {
         thrownException = exception;
@@ -73,7 +75,7 @@ describe("loadFile() shall throw an exception when passed invalid arguments.", f
   it("Exception thrown when there are more than 2 parameters.", function() {
     var thrownException = null;
     try {
-        nPool.loadFile(1, __dirname + '/../resources/helloWorld.js', 'extraParameter');
+        nPool.loadFile(1, testFile, 'extraParameter');
     }
     catch(exception) {
         thrownException = exception;
@@ -84,7 +86,7 @@ describe("loadFile() shall throw an exception when passed invalid arguments.", f
   it("Exception thrown for invalid file key type.", function() {
     var thrownException = null;
     try {
-        nPool.loadFile([ 1, 2, 3 ], __dirname + '/../resources/helloWorld.js', 'extraParameter');
+        nPool.loadFile([ 1, 2, 3 ], testFile, 'extraParameter');
     }
     catch(exception) {
         thrownException = exception;

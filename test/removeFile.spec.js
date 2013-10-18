@@ -1,10 +1,13 @@
 // load appropriate npool module
 try {
-    var nPool = require(__dirname + '/../../build/Release/npool');
+    var nPool = require(__dirname + '/../build/Release/npool');
 }
 catch (e) {
-    var nPool = require(__dirname + '/../../build/Debug/npool');
+    var nPool = require(__dirname + '/../build/Debug/npool');
 }
+
+// test file
+var testFile = __dirname + '/resources/helloWorld.js';
 
 describe("[ removeFile() - Unit Tests ]", function() {
   it("OK", function() {
@@ -15,7 +18,7 @@ describe("[ removeFile() - Unit Tests ]", function() {
 describe("removeFile() shall execute without throwing an exception when a valid file key provided.", function() {
   it("Executed without throwing an exception.", function() {
 
-    nPool.loadFile(1, __dirname + '/../resources/helloWorld.js');
+    nPool.loadFile(1, testFile);
     var thrownException = null;
     try {
        nPool.removeFile(1);
