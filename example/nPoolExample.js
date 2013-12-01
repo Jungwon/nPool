@@ -134,7 +134,7 @@ for(var workCount = 0; workCount < 10; workCount++) {
 
     // create the unit of work object
     var unitOfWork = {
-        workId: workCount,
+        workId: 'FibonacciWorkId',
         fileKey: 1,
         workFunction: "calcFibonacciNumber",
         workParam: {

@@ -123,8 +123,18 @@ THREAD_WORK_ITEM* Thread::BuildWorkItem(Handle<Object> v8Object)
     // exception catcher
     TryCatch tryCatch;
 
-    // get all the properties from the object
-    Local<Number> workId = v8Object->Get(String::NewSymbol("workId"))->ToUint32();
+    // get the work id
+    Local<Value> workId;
+    if(v8Object->Get(String::NewSymbol("workId"))->IsNumber())
+    {
+        workId = v8Object->Get(String::NewSymbol("workId"))->ToUint32();
+    }
+    else if(v8Object->Get(String::NewSymbol("workId"))->IsString())
+    {
+        workId = v8Object->Get(String::NewSymbol("workId"))->ToString();
+    }
+
+    // get the rest of the properties from the object
     Local<Number> fileKey = v8Object->Get(String::NewSymbol("fileKey"))->ToUint32();
     Local<String> workFunction = v8Object->Get(String::NewSymbol("workFunction"))->ToString();
     Local<Object> workParam = v8Object->Get(String::NewSymbol("workParam"))->ToObject();
@@ -144,7 +154,7 @@ THREAD_WORK_ITEM* Thread::BuildWorkItem(Handle<Object> v8Object)
         memset(workItem, 0, sizeof(THREAD_WORK_ITEM));
 
         // workId
-        workItem->workId = workId->Value();
+        workItem->workId = Persistent<Value>::New(workId);
 
         // fileKey
         workItem->fileKey = fileKey->Value();
@@ -191,8 +201,8 @@ void Thread::QueueWorkItem(TASK_QUEUE_DATA *taskQueue, THREAD_WORK_ITEM *workIte
     // set the task item callback function
     taskQueueItem->taskItemCallback = Thread::WorkItemCallback;
 
-    // set the task item id
-    taskQueueItem->taskId = workItem->workId;
+    // set the task item id (not used right now)
+    taskQueueItem->taskId = 0;
     
     // add the task to the queue
     AddTaskToQueue(taskQueue, taskQueueItem);
@@ -318,7 +328,7 @@ void Thread::uvAsyncCallback(uv_async_t* handle, int status)
 
         //create arguments array
         const unsigned argc = 3;
-        Handle<Value> argv[argc] = { callbackObject, Number::New(workItem->workId), exceptionObject };
+        Handle<Value> argv[argc] = { callbackObject, workItem->workId, exceptionObject };
 
         // make callback on node thread
         workItem->callbackFunction->Call(workItem->callbackContext, argc, argv);
@@ -397,6 +407,9 @@ Handle<Object> Thread::GetWorkerObject(THREAD_CONTEXT* thisContext, THREAD_WORK_
 void Thread::DisposeWorkItem(THREAD_WORK_ITEM* workItem, bool freeWorkItem)
 {
     // cleanup the work item data
+    workItem->workId.Dispose();
+    workItem->workId.Clear();
+
     workItem->callbackContext.Dispose();
     workItem->callbackContext.Clear();
 

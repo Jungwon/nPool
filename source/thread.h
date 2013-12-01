@@ -39,8 +39,10 @@ typedef struct THREAD_CONTEXT_STRUCT
 
 typedef struct THREAD_WORK_ITEM_STRUCT
 {
+    // unique identifier of work
+    Persistent<Value>       workId;
+
     // work info and input object/function
-    uint32_t                workId;
     uint32_t                fileKey;
     char*                   workFunction;
     char*                   workParam;
