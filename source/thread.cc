@@ -125,13 +125,11 @@ THREAD_WORK_ITEM* Thread::BuildWorkItem(Handle<Object> v8Object)
 
     // get the work id
     Local<Value> workId;
-    if(v8Object->Get(String::NewSymbol("workId"))->IsNumber())
+    if(v8Object->Get(String::NewSymbol("workId"))->IsNumber() || 
+       v8Object->Get(String::NewSymbol("workId"))->IsString() ||
+       v8Object->Get(String::NewSymbol("workId"))->IsObject())
     {
-        workId = v8Object->Get(String::NewSymbol("workId"))->ToUint32();
-    }
-    else if(v8Object->Get(String::NewSymbol("workId"))->IsString())
-    {
-        workId = v8Object->Get(String::NewSymbol("workId"))->ToString();
+        workId = v8Object->Get(String::NewSymbol("workId"));
     }
 
     // get the rest of the properties from the object

@@ -176,7 +176,9 @@ for(var workCount = 0; workCount < 10; workCount++) {
     // this utilizes the node.js like module loading system
     // for pure javascript modules
     if(workCount == 6) {
-        unitOfWork.workId = 1234;
+        unitOfWork.workId = { 
+            workId: 1234
+        };
         unitOfWork.fileKey = 3;
         unitOfWork.workFunction = "getFruitNames";
         unitOfWork.workParam = {
