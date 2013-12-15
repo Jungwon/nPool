@@ -257,8 +257,11 @@ void* Thread::WorkItemFunction(TASK_QUEUE_WORK_DATA *taskData, void *threadConte
                 workItem->callbackObject = stringify;
                 workItem->isError = false;
 
-                // register external memory
-                V8::AdjustAmountOfExternalAllocatedMemory(strlen(workItem->callbackObject));
+                if(workItem->callbackObject != NULL)
+                {
+                    // register external memory
+                    V8::AdjustAmountOfExternalAllocatedMemory(strlen(workItem->callbackObject));
+                }
             }
         }
     }
@@ -312,7 +315,7 @@ void Thread::uvAsyncCallback(uv_async_t* handle, int status)
         {
             exceptionObject = JSON::Parse(workItem->jsException);
         }
-        else
+        else if(workItem->callbackObject)
         {
             // parse stringified result
             callbackObject = JSON::Parse(workItem->callbackObject);
