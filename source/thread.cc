@@ -124,13 +124,7 @@ THREAD_WORK_ITEM* Thread::BuildWorkItem(Handle<Object> v8Object)
     TryCatch tryCatch;
 
     // get the work id
-    Local<Value> workId;
-    if(v8Object->Get(String::NewSymbol("workId"))->IsNumber() || 
-       v8Object->Get(String::NewSymbol("workId"))->IsString() ||
-       v8Object->Get(String::NewSymbol("workId"))->IsObject())
-    {
-        workId = v8Object->Get(String::NewSymbol("workId"));
-    }
+    Local<Value> workId = v8Object->Get(String::NewSymbol("workId"));
 
     // get the rest of the properties from the object
     Local<Number> fileKey = v8Object->Get(String::NewSymbol("fileKey"))->ToUint32();
@@ -259,7 +253,7 @@ void* Thread::WorkItemFunction(TASK_QUEUE_WORK_DATA *taskData, void *threadConte
             else
             {
                 // strinigfy callback object
-                char* stringify = JSON::Stringify(workResult->ToObject());
+                char* stringify = JSON::Stringify(workResult);
                 workItem->callbackObject = stringify;
                 workItem->isError = false;
 

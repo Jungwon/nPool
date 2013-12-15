@@ -23,12 +23,8 @@ static Handle<Value> ConsoleLog(const Arguments& args)
     }
     else
     {
-        Handle<Object> contextObject = Context::GetCurrent()->Global();
-        Handle<Object> JSON = contextObject->Get(v8::String::New("JSON"))->ToObject();
-        Handle<Function> JSON_stringify = Handle<Function>::Cast(JSON->Get(v8::String::New("stringify")));
-
         Handle<Value> argHandle = args[0];
-        String::Utf8Value logMessage(JSON_stringify->Call(JSON, 1, &(argHandle)));
+        String::Utf8Value logMessage(argHandle->ToString());
         printf("%s\n", *logMessage);
     }
 

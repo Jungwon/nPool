@@ -8,24 +8,19 @@
 // custom source
 #include "utilities.h"
 
-char* JSON::Stringify(Handle<Object> v8Object)
+char* JSON::Stringify(Handle<Value> v8Handle)
 {
     HandleScope scope;
 
-    // get handle to global context object
-    Handle<Context> context = Context::GetCurrent();
-    Handle<Object> global = context->Global();
-
-    // get handle to JSON.stringify()
-    Local<Object> JSON = global->Get(String::New("JSON"))->ToObject();
-    Local<Function> Stringify = Local<Function>::Cast(JSON->Get(String::New("stringify")));
+    // get handle to stringify function
+    Handle<Object> contextObject = Context::GetCurrent()->Global();
+    Handle<Object> JSON = contextObject->Get(v8::String::New("JSON"))->ToObject();
+    Handle<Function> Stringify = Handle<Function>::Cast(JSON->Get(v8::String::New("stringify")));
 
     // execute stringify
-    Handle<Value> v8ObjectHandle = (Handle<Value>)v8Object;
-    Local<String> jsonObject = Local<String>::Cast(Stringify->Call(JSON, 1, &(v8ObjectHandle)));
+    String::Utf8Value utf8ObjectString(Stringify->Call(JSON, 1, &(v8Handle)));
 
-    // get and copy json string (utf8)
-    String::Utf8Value utf8ObjectString(jsonObject);
+    // copy json string (utf8)
     const char* utf8String = Utilities::ToCString(utf8ObjectString);
     uint32_t utf8StringLength = strlen(utf8String);
     char* returnString = (char *)malloc(utf8StringLength + 1);
@@ -37,21 +32,18 @@ char* JSON::Stringify(Handle<Object> v8Object)
     return returnString;
 }
 
-Handle<Object> JSON::Parse(char* jsonObject)
+Handle<Value> JSON::Parse(char* jsonObject)
 {
     HandleScope scope;
 
-    // get handle to global context object
-    Handle<Context> context = Context::GetCurrent();
-    Handle<Object> global = context->Global();
-
-    // get handle to JSON.parse()
-    Local<Object> JSON = global->Get(String::New("JSON"))->ToObject();
-    Local<Function> Parse = Local<Function>::Cast(JSON->Get(String::New("parse")));
+    // get handle to parse function
+    Handle<Object> contextObject = Context::GetCurrent()->Global();
+    Handle<Object> JSON = contextObject->Get(v8::String::New("JSON"))->ToObject();
+    Handle<Function> Parse = Handle<Function>::Cast(JSON->Get(v8::String::New("parse")));
 
     // execute parse
     Handle<Value> jsonString = String::New(jsonObject);
-    Local<Value> v8Object = Parse->Call(JSON, 1, &jsonString);
+    Local<Value> v8Handle = Parse->Call(JSON, 1, &jsonString);
 
-    return scope.Close(Handle<Object>::Cast(v8Object));
+    return scope.Close(v8Handle);
 }
