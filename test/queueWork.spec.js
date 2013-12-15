@@ -230,3 +230,316 @@ describe("queueWork() shall execute without throwing an exception when a using s
         }
     });
 });
+
+describe("queueWork() shall support a work ID for all types without throwing an exception", function() {
+
+    before(function() {
+        nPool.loadFile(1, __dirname + '/resources/workIdTypeModule.js');
+        nPool.createThreadPool(2);
+    });
+
+    after(function() {
+        nPool.destroyThreadPool();
+        nPool.removeFile(1);
+    });
+
+    it("Executed without throwing an exception for work ID of type 'undefined'", function(done) {
+        var resultObject = null;
+        var resultId = null;
+
+        var unitOfWork = {
+            workId: undefined,
+            fileKey: 1,
+            workFunction: "WorkIdTypeFunction",
+            workParam: {
+                result: 'WorkIdTypeTest'
+            },
+
+            callbackFunction: function(callbackObject, workId, exceptionObject) {
+                try {
+                    assert.equal(exceptionObject, null);
+                    assert.equal(callbackObject.result, 'WorkIdTypeTest');
+                    assert.equal(typeof workId, 'undefined');
+                    assert.equal(workId, undefined);
+                    done();
+                }
+                catch(exception) {
+                    done(exception);
+                }
+            },
+            callbackContext: this
+        };
+
+        try
+        {
+            nPool.queueWork(unitOfWork);
+        }
+        catch (exception) {
+            thrownException = exception;
+        }
+    });
+
+    it("Executed without throwing an exception for work ID of type 'null' ('object')", function(done) {
+        var resultObject = null;
+        var resultId = null;
+
+        var unitOfWork = {
+            workId: null,
+            fileKey: 1,
+            workFunction: "WorkIdTypeFunction",
+            workParam: {
+                result: 'WorkIdTypeTest'
+            },
+
+            callbackFunction: function(callbackObject, workId, exceptionObject) {
+                try {
+                    assert.equal(exceptionObject, null);
+                    assert.equal(callbackObject.result, 'WorkIdTypeTest');
+                    assert.equal(typeof workId, 'object');
+                    assert.equal(workId, null);
+                    done();
+                }
+                catch(exception) {
+                    done(exception);
+                }
+            },
+            callbackContext: this
+        };
+
+        try
+        {
+            nPool.queueWork(unitOfWork);
+        }
+        catch (exception) {
+            thrownException = exception;
+        }
+    });
+
+    it("Executed without throwing an exception for work ID of type 'boolean'", function(done) {
+        var resultObject = null;
+        var resultId = null;
+
+        var unitOfWork = {
+            workId: true,
+            fileKey: 1,
+            workFunction: "WorkIdTypeFunction",
+            workParam: {
+                result: 'WorkIdTypeTest'
+            },
+
+            callbackFunction: function(callbackObject, workId, exceptionObject) {
+                try {
+                    assert.equal(exceptionObject, null);
+                    assert.equal(callbackObject.result, 'WorkIdTypeTest');
+                    assert.equal(typeof workId, 'boolean');
+                    assert.equal(workId, true);
+                    done();
+                }
+                catch(exception) {
+                    done(exception);
+                }
+            },
+            callbackContext: this
+        };
+
+        try
+        {
+            nPool.queueWork(unitOfWork);
+        }
+        catch (exception) {
+            thrownException = exception;
+        }
+    });
+
+    it("Executed without throwing an exception for work ID of type 'number'", function(done) {
+        var resultObject = null;
+        var resultId = null;
+
+        var unitOfWork = {
+            workId: 1234,
+            fileKey: 1,
+            workFunction: "WorkIdTypeFunction",
+            workParam: {
+                result: 'WorkIdTypeTest'
+            },
+
+            callbackFunction: function(callbackObject, workId, exceptionObject) {
+                try {
+                    assert.equal(exceptionObject, null);
+                    assert.equal(callbackObject.result, 'WorkIdTypeTest');
+                    assert.equal(typeof workId, 'number');
+                    assert.equal(workId, 1234);
+                    done();
+                }
+                catch(exception) {
+                    done(exception);
+                }
+            },
+            callbackContext: this
+        };
+
+        try
+        {
+            nPool.queueWork(unitOfWork);
+        }
+        catch (exception) {
+            thrownException = exception;
+        }
+    });
+
+    it("Executed without throwing an exception for work ID of type 'string'", function(done) {
+        var resultObject = null;
+        var resultId = null;
+
+        var unitOfWork = {
+            workId: 'myWorkIdString',
+            fileKey: 1,
+            workFunction: "WorkIdTypeFunction",
+            workParam: {
+                result: 'WorkIdTypeTest'
+            },
+
+            callbackFunction: function(callbackObject, workId, exceptionObject) {
+                try {
+                    assert.equal(exceptionObject, null);
+                    assert.equal(callbackObject.result, 'WorkIdTypeTest');
+                    assert.equal(typeof workId, 'string');
+                    assert.equal(workId, 'myWorkIdString');
+                    done();
+                }
+                catch(exception) {
+                    done(exception);
+                }
+            },
+            callbackContext: this
+        };
+
+        try
+        {
+            nPool.queueWork(unitOfWork);
+        }
+        catch (exception) {
+            thrownException = exception;
+        }
+    });
+
+    it("Executed without throwing an exception for work ID of type 'array' ('object')", function(done) {
+        var resultObject = null;
+        var resultId = null;
+
+        var unitOfWork = {
+            workId: [ 1, 2, 3 ],
+            fileKey: 1,
+            workFunction: "WorkIdTypeFunction",
+            workParam: {
+                result: 'WorkIdTypeTest'
+            },
+
+            callbackFunction: function(callbackObject, workId, exceptionObject) {
+                try {
+                    assert.equal(exceptionObject, null);
+                    assert.equal(callbackObject.result, 'WorkIdTypeTest');
+                    assert.equal(typeof workId, 'object');
+                    assert.equal(workId.length, 3);
+                    done();
+                }
+                catch(exception) {
+                    done(exception);
+                }
+            },
+            callbackContext: this
+        };
+
+        try
+        {
+            nPool.queueWork(unitOfWork);
+        }
+        catch (exception) {
+            thrownException = exception;
+        }
+    });
+
+    it("Executed without throwing an exception for work ID of type 'object'", function(done) {
+        var resultObject = null;
+        var resultId = null;
+
+        var unitOfWork = {
+            workId: {
+                functionProp: function() {
+                    return 'workIdFunctionProp'
+                },
+                valueProp: 1234,
+                objectProp: {
+                    propValue: 'Hello!'
+                }
+            },
+            fileKey: 1,
+            workFunction: "WorkIdTypeFunction",
+            workParam: {
+                result: 'WorkIdTypeTest'
+            },
+
+            callbackFunction: function(callbackObject, workId, exceptionObject) {
+                try {
+                    assert.equal(exceptionObject, null);
+                    assert.equal(callbackObject.result, 'WorkIdTypeTest');
+                    assert.equal(typeof workId, 'object');
+                    assert.equal(workId.functionProp(), 'workIdFunctionProp');
+                    assert.equal(workId.valueProp, 1234);
+                    assert.equal(workId.objectProp.propValue, 'Hello!');
+                    done();
+                }
+                catch(exception) {
+                    done(exception);
+                }
+            },
+            callbackContext: this
+        };
+
+        try
+        {
+            nPool.queueWork(unitOfWork);
+        }
+        catch (exception) {
+            thrownException = exception;
+        }
+    });
+
+    it("Executed without throwing an exception for work ID of type 'function'", function(done) {
+        var resultObject = null;
+        var resultId = null;
+
+        var unitOfWork = {
+            workId: function() {
+                return 'workIdSupportsFunctions!'
+            },
+            fileKey: 1,
+            workFunction: "WorkIdTypeFunction",
+            workParam: {
+                result: 'WorkIdTypeTest'
+            },
+
+            callbackFunction: function(callbackObject, workId, exceptionObject) {
+                try {
+                    assert.equal(exceptionObject, null);
+                    assert.equal(callbackObject.result, 'WorkIdTypeTest');
+                    assert.equal(typeof workId, 'function');
+                    assert.equal(workId(), 'workIdSupportsFunctions!');
+                    done();
+                }
+                catch(exception) {
+                    done(exception);
+                }
+            },
+            callbackContext: this
+        };
+
+        try
+        {
+            nPool.queueWork(unitOfWork);
+        }
+        catch (exception) {
+            thrownException = exception;
+        }
+    });
+});
