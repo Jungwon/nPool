@@ -10,8 +10,8 @@ class JSON
 {
     public:
         
-        static char*            Stringify(Handle<Object> v8Object);
-        static Handle<Object>   Parse(char* jsonObject);
+        static char*            Stringify(Handle<Value> v8Handle);
+        static Handle<Value>    Parse(char* jsonObject);
 };
 
 #endif /* _JSON_H_ */
